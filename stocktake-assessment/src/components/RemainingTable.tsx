@@ -7,7 +7,8 @@ const RemainingTable: React.FC<TableProps> = ({ items, setSelected }) => {
     <>
       <h1 className='text-left font-normal text-3xl text-gray-700 mb-3'>Remaining</h1>
       <div className='bg-white rounded-lg shadow-lg p-10 mb-10'>
-        <table className="table-fixed w-full">
+        {items.length === 0 && <p className='text-left'>No remaining stock</p>}
+        {items.length > 0 && <table className="table-fixed w-full">
           <thead>
             <tr className='text-left uppercase text-gray-500 text-light border-b-[#ddd]'>
               <th className='p-4'>Stock Name</th>
@@ -32,7 +33,7 @@ const RemainingTable: React.FC<TableProps> = ({ items, setSelected }) => {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table>}
       </div>
     </>
   );

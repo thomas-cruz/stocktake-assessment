@@ -34,7 +34,7 @@ export interface TableProps {
 
 export interface ModalProps {
   item: IStocktakeItem;
-  nextItem?: IStocktakeItem;
+  nextItem: IStocktakeItem | null;
   onClose: () => void;
-  setSelected : (i: IStocktakeItem) => void;
+  onSave: (i: IStocktakeItem) => void;
 }

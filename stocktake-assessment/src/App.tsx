@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import RemainingTable from './components/RemainingTable'
 import CountedTable from './components/CountedTable'
 import { mockRemainingStocktakeItems, mockCountedStocktakeItems } from './constants/stock'
@@ -9,14 +9,49 @@ import Modal from './components/StocktakeModal'
 function App() {
   const [remainingStock, setRemainingStock] = useState<IStocktakeItem[]>(mockRemainingStocktakeItems)
   const [countedStock, setCountedStock] = useState<IStocktakeItem[]>(mockCountedStocktakeItems)
-  const [selectedItem, setSelectedItem] = useState<IStocktakeItem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<IStocktakeItem | null>(null)
+  const [saveItem, setSaveItem] = useState<IStocktakeItem>()
+
+  
+  const removeFromRemaining = (removeId?:number) => {
+    const newRemaining = remainingStock.filter(obj => obj.stockId !== removeId)
+    setRemainingStock(newRemaining)
+  }
+
+  const addToCounted = (item?: IStocktakeItem) => {
+    item && setCountedStock([...countedStock, item])
+  }
+
+  //getting next item
+  const nextItem = useMemo(()=>{
+    if(saveItem){
+      const index = remainingStock.findIndex(item => item.stockId === saveItem.stockId)
+      return index + 1 < remainingStock.length ? 
+        remainingStock[index + 1] :
+        remainingStock[0]
+    }
+    return null
+  }, [saveItem])
+
+  useEffect(()=>{
+    if(selectedItem !== null && saveItem){
+      //remove from remaining stock
+      removeFromRemaining(saveItem?.stockId)
+
+      //add to counted stock
+      addToCounted(saveItem)
+
+      setSelectedItem(null)
+      setSelectedItem(nextItem)
+    }
+  }, [selectedItem, saveItem])
 
   return (
     <>
       <RemainingTable items={remainingStock} setSelected={setSelectedItem}/>
       <CountedTable items={countedStock} setSelected={setSelectedItem}/>
       {selectedItem && (
-        <Modal item={selectedItem} onClose={() => setSelectedItem(null)} setSelected={setSelectedItem}/>
+        <Modal item={selectedItem} nextItem={nextItem} onClose={() => setSelectedItem(null)} onSave={setSaveItem} />
       )}
     </>
   )

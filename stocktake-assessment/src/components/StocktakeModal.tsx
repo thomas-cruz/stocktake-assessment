@@ -2,9 +2,17 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { ModalProps } from '../types/stocktake';
 
-const Modal: React.FC<ModalProps> = ({ item, nextItem, onClose, setSelected}) => {
+const Modal: React.FC<ModalProps> = ({ item, nextItem, onClose, onSave}) => {
   const [countInput, setCountInput] = useState(item.countValue)
   const [dropdownCount, setDropdownCount] = useState(0)
+
+  const save = () => {
+    onSave({
+      ...item,
+      priorValue: item.countValue,
+      countValue: countInput
+    })
+  }
 
   return ReactDOM.createPortal(
     <div className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-[50]'>
@@ -61,11 +69,13 @@ const Modal: React.FC<ModalProps> = ({ item, nextItem, onClose, setSelected}) =>
           </span>
         </div>
         
+        {nextItem && 
         <div className='text-start py-8 border-b-2 border-b-[#ddd]'>
-          <p className='text-sm text-gray-500 text-light'><strong>Next:</strong> testname</p>
+          <p className='text-sm text-gray-500 text-light'><strong>Next:</strong> {nextItem.name}</p>
         </div>
+        }
         
-        <button className='self-end text-center mt-5 px-6 py-4 bg-blue-700 text-white rounded-md cursor-pointer' onClick={onClose}>
+        <button className='self-end text-center mt-5 px-6 py-4 bg-blue-700 text-white rounded-md cursor-pointer' onClick={()=>save()}>
           Save & Next
         </button>
       </div>
