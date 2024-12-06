@@ -30,8 +30,8 @@ const CountedTable: React.FC<TableProps> = ({ items, setSelected }) => {
                 <td className='p-4'>{Math.abs(item.priorQuantity - item.countValue)} units</td>
                 <td className='p-4'>{
                   item.countValue === item.priorQuantity ? 
-                    <p className='text-green-700'>Done</p> : 
-                    <p className='text-yellow-700'>Variance</p>
+                    <p className='text-green-700'>☑ Done</p> : 
+                    <p className='text-yellow-700'>⚠︎ Variance</p>
                   }
                 </td>
                 <td 

@@ -17,9 +17,12 @@ const Modal: React.FC<ModalProps> = ({ item, nextItem, onClose, onSave}) => {
   return ReactDOM.createPortal(
     <div className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-[50]'>
       <div className='bg-white p-5 rounded-lg min-w-[500px] max-w-11/12 shadow-md text-center flex flex-col'>
-        <h1 className='text-left font-normal text-3xl mb-3 border-b-2 border-b-[#ddd]'>
-          Perform Stocktake
-        </h1>
+        <div className='flex flex-row justify-between mb-3 border-b-2 border-b-[#ddd]'>
+          <h1 className='text-left font-normal text-3xl'>
+            Perform Stocktake
+          </h1>
+          <button className='pb-4 text-gray-500 text-4xl' onClick={onClose}>𐄂</button>
+        </div>
         <p className='text-left font-normal border-b-2 border-b-[#ddd] py-4 mb-3'>
           {item.name}
         </p>
@@ -32,7 +35,10 @@ const Modal: React.FC<ModalProps> = ({ item, nextItem, onClose, onSave}) => {
           </span>
           <span>
             <input
-              className='w-64 text-center text-3xl p-8 border-2 border-b-[#ddd]' 
+              className={`w-64 text-center text-3xl p-8 border-2 border-b-[#ddd] 
+                ${(item.countValue !== item.currentQuantity) && `bg-gradient-to-t from-orange-100 to-transparent`}
+                ${(item.countValue == item.currentQuantity) && `bg-gradient-to-t from-green-100 to-transparent`}
+              ` }
               type='number'
               value={countInput} 
               onChange={e => setCountInput(parseInt(e.target.value))}
@@ -75,9 +81,16 @@ const Modal: React.FC<ModalProps> = ({ item, nextItem, onClose, onSave}) => {
         </div>
         }
         
-        <button className='self-end text-center mt-5 px-6 py-4 bg-blue-700 text-white rounded-md cursor-pointer' onClick={()=>save()}>
-          Save & Next
-        </button>
+        <div className='flex flex-row justify-between'>
+          <span className='flex flex-row space-x-4 content-center self-start py-8'>
+            <input type='checkbox'></input>
+            <p className='text-md text-gray-500 text-normal'>Skip stocktake for this item</p>
+          </span>
+          <button className='self-end text-center mt-5 px-6 py-4 my-2 bg-blue-700 text-white rounded-md cursor-pointer' onClick={()=>save()}>
+            Save & Next
+          </button>
+        </div>
+
       </div>
     </div>,
     document.body

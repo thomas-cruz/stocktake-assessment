@@ -50,6 +50,10 @@ function App() {
 
   return (
     <>
+      <div className='flex flex-row mb-10'>
+        <button className='text-left text-3xl font-bold text-gray-600 border-2 border-gray-400 rounded-lg px-2 pb-1 mr-2'>←</button>
+        <h1 className='text-left text-3xl font-bold text-gray-600'>Stocktake #98</h1>
+      </div>
       <RemainingTable items={remainingStock} setSelected={setSelectedItem}/>
       <CountedTable items={countedStock} setSelected={setSelectedItem}/>
       {selectedItem && (
