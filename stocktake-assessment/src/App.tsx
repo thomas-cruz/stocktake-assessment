@@ -10,7 +10,7 @@ function App() {
   const [remainingStock, setRemainingStock] = useState<IStocktakeItem[]>(mockRemainingStocktakeItems)
   const [countedStock, setCountedStock] = useState<IStocktakeItem[]>(mockCountedStocktakeItems)
   const [selectedItem, setSelectedItem] = useState<IStocktakeItem | null>(null)
-  const [saveItem, setSaveItem] = useState<IStocktakeItem>()
+  const [saveItem, setSaveItem] = useState<IStocktakeItem | null>(null)
 
   
   const removeFromRemaining = (removeId?:number) => {
@@ -24,14 +24,14 @@ function App() {
 
   //getting next item
   const nextItem = useMemo(()=>{
-    if(saveItem){
-      const index = remainingStock.findIndex(item => item.stockId === saveItem.stockId)
+    if(selectedItem){
+      const index = remainingStock.findIndex(item => item.stockId === selectedItem.stockId)
       return index + 1 < remainingStock.length ? 
         remainingStock[index + 1] :
         remainingStock[0]
     }
     return null
-  }, [saveItem])
+  }, [selectedItem])
 
   useEffect(()=>{
     if(selectedItem !== null && saveItem){
@@ -41,7 +41,9 @@ function App() {
       //add to counted stock
       addToCounted(saveItem)
 
-      setSelectedItem(null)
+      setSaveItem(null)
+
+      //reopen modal with next item
       setSelectedItem(nextItem)
     }
   }, [selectedItem, saveItem])
